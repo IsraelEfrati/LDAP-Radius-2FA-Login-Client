@@ -22,7 +22,9 @@ Select login and enter the following credentials:
 
 Login DN: cn=admin,dc=example,dc=org        
 Password: admin
+
  ![Alt text](https://github.com/IsraelEfrati/screenshoots/blob/main/1.png?raw=true "Optional Title")
+ 
 Create group: my_users              
 Select dc=example,dc=org -> 'Create new entry here' 
 
