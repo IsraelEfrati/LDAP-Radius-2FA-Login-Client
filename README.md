@@ -43,3 +43,25 @@ The value of the email should be <User ID>@example.org
 The user Id was created in previous stage when the user was added.
       
 Click on 'update object' 
+
+  # Google Authenticator
+## Installations        
+apt-get install libpam-google-authenticator
+
+## Create New Linux User
+Run the command:        
+sudo adduser <ldap User Id>     
+set password and leave the other fields empty       
+
+## Set up Google Authenticator
+run the commands:       
+su <ldap user id>       
+cd ~        
+google-authenticator        
+
+enter 'y' for the first question        
+scan the QR code in your google authenticator app       
+enter 'y'       
+enter y/n for the remaining questions       
+run the command 'exit'
+ 
