@@ -33,7 +33,7 @@ In the 'group' field write 'my_users'
 
 Click on 'create object' and 'commit' in the next page
 
-![Alt text]([/relative/path/to/img.jpg](https://github.com/IsraelEfrati/screenshoots/blob/main/2.png)?raw=true "Optional Title")
+ ![Alt text](https://github.com/IsraelEfrati/screenshoots/blob/main/2.png?raw=true "Optional Title")
 
  
 Select 'cn=my_users' and select 'create a child entry'      
