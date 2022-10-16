@@ -42,7 +42,7 @@ Enter first and last name, create a password and select
 
 Select 'create object' 
 
-![Alt text]([/relative/path/to/img.jpg](https://github.com/IsraelEfrati/screenshoots/blob/main/3-4.png)?raw=true "Optional Title")
+ ![Alt text](https://github.com/IsraelEfrati/screenshoots/blob/main/3-4.png?raw=true "Optional Title")
 
 
 Select  'Add new attribute' 
@@ -51,7 +51,7 @@ Select 'Email' in the 'Add Attribute' dropdown.
 The value of the email should be <User ID>@example.org      
 The user Id was created in previous stage when the user was added.
 	
-![Alt text]([/relative/path/to/img.jpg](https://github.com/IsraelEfrati/screenshoots/blob/main/5.png)?raw=true "Optional Title")
+ ![Alt text](https://github.com/IsraelEfrati/screenshoots/blob/main/5.png?raw=true "Optional Title")
 
       
 Click on 'update object' 
