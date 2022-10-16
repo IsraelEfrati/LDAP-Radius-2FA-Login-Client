@@ -64,4 +64,169 @@ scan the QR code in your google authenticator app
 enter 'y'       
 enter y/n for the remaining questions       
 run the command 'exit'
+
+
+# FreeRADIUS
+## Installations   
+apt-get update      
+apt-get upgrade     
+apt-get install freeradius freeradius-common freeradius-utils freeradius-ldap
  
+
+## Configuring FreeRADIUS
+
+#### /etc/freeradius/3.0/radiusd.conf        
+
+Under the 'security' section change the user and group to root:
+```
+user = root         
+group = root
+```
+ 
+#### /etc/freeradius/3.0/users
+Add the following lines to the file:
+```
+DEFAULT 	Ldap-Group == "cn=my_users,dc=example,dc=org" 
+            Reply-Message = "You are Accepted"
+```
+
+#### /etc/freeradius/3.0/sites-enabled/default
+Add the following lines in the 'authorize' section:
+```
+filter_uuid
+filter_google_otp
+```
+
+Under the line: '#  The ldap module reads passwords from the LDAP database.':        
+Remove the '-' before ldap
+```
+'ldap'
+```
+
+Add the following  lines in the 'authenticate' section:     
+```
+Auth-Type PAP {
+		pap 
+		if (&Google-Password) {
+			 update request { 
+			 	&User-Name := "%{&User-UUID}" 
+			 	&User-Password := "%{&Google-Password}" 		 	
+			 	} 
+			 pam 
+		} 
+		else { 
+			update reply { 
+				Reply-Message := "Login incorrect: TOTP Fail" 
+				} 
+			reject 
+		} 
+
+	}
+```
+
+#### /etc/freeradius/3.0/policy.d/filter
+Add the following:
+```
+filter_uuid {  
+	if (&User-Name =~ /^(.*)@(.*)$/) { 
+		update request { 
+			&User-UUID := "%{1}" 
+		} 
+	} 
+}
+
+filter_google_otp { 
+	if (&User-Password =~ /^(.*)([0-9]{6})$/) {
+		update request { 
+			&Google-Password := "%{2}"
+			&User-Password := "%{1}" 
+			
+		} 
+		
+	} 
+}
+```
+
+#### /etc/freeradius/3.0/dictionary
+Add the following:
+```
+ATTRIBUTE 	Google-Password 		3000 	string 
+ATTRIBUTE 	User-UUID 			    3001    string
+```
+#### /etc/freeradius/3.0/clients.conf
+
+Add the following:
+```
+client MyComputer { 
+	ipaddr = *
+	secret = testing123 }
+```
+
+It is best to change the 'secret' for security reasons
+
+#### /etc/freeradius/3.0/mods-available/ldap
+In the 'ldap' section:      
+Change the server to the ip where the ldap server is running:
+```
+server = 'localhost'
+```
+
+change the following values to the ldap server admin identity and password with which the radius will query the ldap server.
+```
+identity = 'cn=admin,dc=example,dc=org'
+password = admin
+```
+change the following value:
+```
+base_dn = 'cn=my_users,dc=example,dc=org'
+```
+under the 'user' section change the filter to:
+```
+filter = "(mail=%{%{Stripped-User-Name}:-%{User-Name}})"
+```
+
+under the 'group' section change the filter to:
+```
+filter = '(objectClass=GroupOfNames)'
+```
+
+under the 'membership filter' section change the filter to:
+```
+membership_filter = "(|(&(objectClass=GroupOfNames)(member=%{control:Ldap-UserDn}))(&(objectClass=GroupOfNames)(member=%{control:Ldap-UserDn})))"
+```
+
+Run the following command:      
+sudo ln -s  /etc/freeradius/3.0/mods-available/ldap  /etc/freeradius/3.0/mods-enabled/ldap
+
+
+#### /etc/pam.d/radiusd 
+Add the following line:
+```
+auth required pam_google_authenticator.so forward_pass
+```
+comment out the rest of the lines:
+```
+#@include common-auth
+#@include common-account
+#@include common-password
+#@include common-session
+```
+
+Run the following command:      
+sudo ln -s /etc/freeradius/3.0/mods-available/pam /etc/freeradius/3.0/mods-enabled
+
+## Run freeRADIUS
+
+#### To restart the freeRADIUS service:     
+systemctl restart freeradius.service
+
+#### To run freeRADIUS with logging run the following :
+systemctl stop freeradius.service       
+sudo freeradius -XXX > ./debug.txt
+
+
+## Test configuration:
+Run the following:
+radtest <ldap user email>  <ldap user password + google authenticator code> localhost 1812 testing123
+ 
+
