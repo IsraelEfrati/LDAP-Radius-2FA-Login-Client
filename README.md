@@ -163,7 +163,7 @@ filter_google_otp {
 Add the following:
 ```
 ATTRIBUTE 	Google-Password 		3000 	string 
-ATTRIBUTE 	User-UUID 			    3001    string
+ATTRIBUTE 	User-UUID 			3001    string
 ```
 #### /etc/freeradius/3.0/clients.conf
 
