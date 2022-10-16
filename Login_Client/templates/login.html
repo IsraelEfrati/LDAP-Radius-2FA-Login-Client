@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>Login</h1>
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+  <form method=post>
+    <dl>
+      <dt>Email:
+      <dd><input type=text name=email value="{{
+          request.form.email }}">
+      <dt>Password:
+      <dd><input type=password name=password>
+      <dt>Google Authenticator:
+      <dd><input type=password name=google_auth>
+    </dl>
+    <p><input type=submit value=Login>
+  </form>
+{% endblock %}
