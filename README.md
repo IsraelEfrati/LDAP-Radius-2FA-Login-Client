@@ -229,4 +229,11 @@ sudo freeradius -XXX > ./debug.txt
 Run the following:
 radtest <ldap user email>  <ldap user password + google authenticator code> localhost 1812 testing123
  
+# Login Client
+Download the python login client by running following:      
+Git clone https://github.com/IsraelEfrati/LDAP-Radius-2FA-Login-Client.git
+
+Run the project and browse to the URL in the output.
+
+Provide user email, password and google passcode from the app.
 
