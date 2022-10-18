@@ -202,7 +202,7 @@ under the 'group' section change the filter to:
 filter = '(objectClass=GroupOfNames)'
 ```
 
-under the 'membership filter' section change the filter to:
+under the 'group' section change the filter to:
 ```
 membership_filter = "(|(&(objectClass=GroupOfNames)(member=%{control:Ldap-UserDn}))(&(objectClass=GroupOfNames)(member=%{control:Ldap-UserDn})))"
 ```
